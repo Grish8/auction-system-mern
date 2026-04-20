@@ -200,5 +200,10 @@ module.exports = {
     loginUser,
     loginStatus,
     getUser,
-    logoutUser
+    logoutUser,
+    loginAsSeller,
+    getUserBalance,
+    getAllUser,
+    estimateIncome
+
 };
