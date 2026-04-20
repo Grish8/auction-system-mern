@@ -1,8 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
-
-const registerUser = asyncHandler(async (req, res) => {
-  const {name,email,password} = req.body;
+const User = require("../models/UserModel");
 
 
   const generateToken = (id) => {
@@ -10,6 +8,9 @@ const registerUser = asyncHandler(async (req, res) => {
       expiresIn: "1d",
     });
   }
+
+  const registerUser = asyncHandler(async (req, res) => {
+  const {name,email,password} = req.body;
 
   if(!name || !email || !password){
       res.status(401);
@@ -38,7 +39,7 @@ const registerUser = asyncHandler(async (req, res) => {
   );
 
   if(user){
-    const {_id,name,email,isAdmin} = user;
+    const {_id,name,email,photo, role} = user;
     res.status(201).json({_id, name , email , photo , role , token});
   }else{
     res.status(400);
@@ -48,5 +49,5 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-    registerUser
+    registerUser 
 };
