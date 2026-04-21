@@ -11,7 +11,7 @@ const userRoute = require('./routes/userRoute');
 const productRoute = require('./routes/productRoute');
 const categoryRoute = require('./routes/categoryRoute');
 const biddingRoute = require('./routes/biddingRoute');
-const User = require('./models/UserModel');
+const User = require('./models/userModel');
 
 const errorHandler = require("./middleware/errorMiddleWare");
 
