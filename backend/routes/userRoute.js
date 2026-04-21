@@ -1,12 +1,14 @@
 const express = require('express');
 const {registerUser, loginUser, loginStatus, getUser, logoutUser, loginAsSeller, getUserBalance, getAllUser, estimateIncome} = require('../controllers/userCtr');
 const router = express.Router();
+const { protect, isAdmin } = require("../middleWare/authMiddleWare");
+
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.get("/logged-in", loginStatus);
+router.get("/loggedin", loginStatus);
 router.get("/logout", logoutUser);
-router.post("seller", loginAsSeller);
+router.post("/seller", loginAsSeller);
 router.get("/getuser", protect, getUser);
 router.get("sell-amount", protect, getUserBalance);
 
