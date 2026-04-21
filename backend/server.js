@@ -2,13 +2,18 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const express = require('express'); 
 const cors = require('cors');
+const path = require('path');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 dotenv.config();
+
 const userRoute = require('./routes/userRoute');
+const productRoute = require('./routes/productRoute');
+const categoryRoute = require('./routes/categoryRoute');
+const biddingRoute = require('./routes/biddingRoute');
+const User = require('./models/UserModel');
+
 const errorHandler = require("./middleware/errorMiddleWare");
-
-
 
 const app = express();
 
@@ -39,6 +44,22 @@ app.use(errorHandler);
 app.get("/", (req, res) => {
     res.send("Home Page");
 });
+
+// Routes middleware
+app.use("/api/users", userRoute);
+app.use("/api/product", productRoute);
+app.use("/api/category", categoryRoute);
+app.use("/api/bidding", biddingRoute);
+
+
+//Error middleware
+app.use(errorHandler);
+
+// Routes
+app.get("/", (req, res) => {
+    res.send("Home Page");
+});
+
 
 // Connect to db
 mongoose.connect(process.env.DATABASE_URL)
