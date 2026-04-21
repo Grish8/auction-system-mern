@@ -1,8 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
-const User = require("../models/userModel");
+const User = require("../model/userModel");
 const bcrypt = require("bcryptjs");
-const Product = require("../models/productModel");
+const Product = require("../model/productModel");
 
 
   const generateToken = (id) => {
