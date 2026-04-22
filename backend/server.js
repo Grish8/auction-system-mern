@@ -37,13 +37,8 @@ app.use(
 );
 
 const PORT = process.env.PORT || 5000;
-app.use("/api/users", userRoute)
 
-app.use(errorHandler);
 
-app.get("/", (req, res) => {
-    res.send("Home Page");
-});
 
 // Routes middleware
 app.use("/api/users", userRoute);
@@ -51,6 +46,7 @@ app.use("/api/product", productRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/bidding", biddingRoute);
 
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 //Error middleware
 app.use(errorHandler);
