@@ -15,7 +15,7 @@ const Product = require("../model/productModel");
   const {name,email,password} = req.body;
 
   if(!name || !email || !password){
-      res.status(401);
+      res.status(400);
       throw new Error('Please fill in all required fields');
   }
 
