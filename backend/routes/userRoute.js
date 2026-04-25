@@ -10,7 +10,7 @@ router.get("/loggedin", loginStatus);
 router.get("/logout", logoutUser);
 router.post("/seller", loginAsSeller);
 router.get("/getuser", protect, getUser);
-router.get("sell-amount", protect, getUserBalance);
+router.get("/sell-amount", protect, getUserBalance);
 
 router.get("/estimate-income", protect, isAdmin, estimateIncome);
 router.get("/users", protect, isAdmin, getAllUser);
