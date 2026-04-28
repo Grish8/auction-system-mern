@@ -1,11 +1,11 @@
 const asyncHandler = require("express-async-handler");
-const Product = require("../model/productModel");
+const product = require("../model/productModel");
 const slugify = require("slugify");
 const BiddingProduct = require("../model/biddingProductModel");
 const cloudinary = require("cloudinary").v2;
 
 const createProduct = asyncHandler(async (req, res) => {
-  const { title, description, price, category, height, lengthpic, width, mediumused, weigth } = req.body;
+  const { title, description, price, category, height, lengthpic, width, mediumused, weight } = req.body;
   const userId = req.user.id;
 
   const originalSlug = slugify(title, {
@@ -59,7 +59,7 @@ const createProduct = asyncHandler(async (req, res) => {
     lengthpic,
     width,
     mediumused,
-    weigth,
+    weight,
     image: fileData,
   });
   res.status(201).json({
@@ -165,7 +165,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Product deleted." });
 });
 const updateProduct = asyncHandler(async (req, res) => {
-  const { title, description, price, height, lengthpic, width, mediumused, weigth } = req.body;
+  const { title, description, price, height, lengthpic, width, mediumused, weight } = req.body;
   const { id } = req.params;
   const product = await Product.findById(id);
 
@@ -217,7 +217,7 @@ const updateProduct = asyncHandler(async (req, res) => {
       lengthpic,
       width,
       mediumused,
-      weigth,
+      weight,
       image: Object.keys(fileData).length === 0 ? Product?.image : fileData,
     },
     {

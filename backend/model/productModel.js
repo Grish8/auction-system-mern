@@ -50,7 +50,7 @@ const productSchema = mongoose.Schema(
     mediumused: {
       type: String,
     },
-    weigth: {
+    weight: {
       type: Number,
     },
     isverify: {
