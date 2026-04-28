@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const product = require("../model/productModel");
+const Product = require("../model/productModel");
 const slugify = require("slugify");
 const BiddingProduct = require("../model/biddingProductModel");
 const cloudinary = require("cloudinary").v2;
