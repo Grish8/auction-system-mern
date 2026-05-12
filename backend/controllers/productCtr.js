@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Product = require("../model/productModel");
 const slugify = require("slugify");
 const BiddingProduct = require("../model/biddingProductModel");
-const cloudinary = require("cloudinary").v2;
+const cloudinary = require("cloudinary").v2;   //create a cloudinary account and add your cloud name, api key and api secret in .env file to upload images to cloudinary and get the url of the uploaded image to save in database.
 
 const createProduct = asyncHandler(async (req, res) => {
   const { title, description, price, category, height, lengthpic, width, mediumused, weight } = req.body;
@@ -26,12 +26,12 @@ const createProduct = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Please fill in all fields");
   }
-
-  let fileData = {};
+// upload to cloudinary using multer
+  let fileData = {}; 
   if (req.file) {
-    let uploadedFile;
+    let uploadedFile; //
     try {
-      uploadedFile = await cloudinary.uploader.upload(req.file.path, {
+      uploadedFile = await cloudinary.uploader.upload(req.file.path, {   // Uploading the image to Cloudinary using the uploader method and passing the file path and folder name where the image will be stored in Cloudinary.
         folder: "Bidding/Product",
         resource_type: "image",
       });
@@ -48,6 +48,7 @@ const createProduct = asyncHandler(async (req, res) => {
     };
   }
 
+  // Create the product in the database with the provided details and the image data from Cloudinary.
   const product = await Product.create({
     user: userId,
     title,
@@ -68,6 +69,7 @@ const createProduct = asyncHandler(async (req, res) => {
   });
 });
 
+// get all products with latest bidding price and total number of bids for each product
 const getAllProducts = asyncHandler(async (req, res) => {
   const products = await Product.find({}).sort("-createdAt").populate("user");
 
