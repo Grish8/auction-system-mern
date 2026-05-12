@@ -12,7 +12,6 @@ const productRoute = require('./routes/productRoute');
 const categoryRoute = require('./routes/categoryRoute');
 const biddingRoute = require('./routes/biddingRoute');
 const User = require('./model/userModel');
-
 const errorHandler = require("./middleWare/errorMiddleWare");
 
 const app = express();

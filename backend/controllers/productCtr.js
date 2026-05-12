@@ -232,6 +232,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 
 // for admin only users
 const verifyAndAddCommissionProductByAdmin = asyncHandler(async (req, res) => {
+
   const { commission } = req.body;
   const { id } = req.params;
 
@@ -266,7 +267,7 @@ const getAllProductsByAdmin = asyncHandler(async (req, res) => {
   res.status(200).json(productsWithPrices);
 });
 
-// dot not it
+// for admin only users
 const deleteProductsByAdmin = asyncHandler(async (req, res) => {
   try {
     const { productIds } = req.body;
