@@ -231,7 +231,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 });
 
 // for admin only users
-const verifyAndAddCommissionProductByAmdin = asyncHandler(async (req, res) => {
+const verifyAndAddCommissionProductByAdmin = asyncHandler(async (req, res) => {
   const { commission } = req.body;
   const { id } = req.params;
 
@@ -249,7 +249,7 @@ const verifyAndAddCommissionProductByAmdin = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Product verified successfully", data: product });
 });
 
-const getAllProductsByAmdin = asyncHandler(async (req, res) => {
+const getAllProductsByAdmin = asyncHandler(async (req, res) => {
   const products = await Product.find({}).sort("-createdAt").populate("user");
 
   const productsWithPrices = await Promise.all(
@@ -267,7 +267,7 @@ const getAllProductsByAmdin = asyncHandler(async (req, res) => {
 });
 
 // dot not it
-const deleteProductsByAmdin = asyncHandler(async (req, res) => {
+const deleteProductsByAdmin = asyncHandler(async (req, res) => {
   try {
     const { productIds } = req.body;
 
@@ -286,9 +286,9 @@ module.exports = {
   getProductBySlug,
   deleteProduct,
   updateProduct,
-  verifyAndAddCommissionProductByAmdin,
-  getAllProductsByAmdin,
-  deleteProductsByAmdin,
+  verifyAndAddCommissionProductByAdmin,
+  getAllProductsByAdmin,
+  deleteProductsByAdmin,
   getAllSoldProducts,
   getAllProductsofUser,
 };
