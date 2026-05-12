@@ -5,10 +5,10 @@ const {
   deleteProduct,
   updateProduct,
   getProductBySlug,
-  getAllProductsByAmdin,
-  deleteProductsByAmdin,
+  getAllProductsByAdmin,
+  deleteProductsByAdmin,
   getAllSoldProducts,
-  verifyAndAddCommissionProductByAmdin,
+  verifyAndAddCommissionProductByAdmin,
   getAllProductsofUser,
   getWonProducts,
 } = require("../controllers/productCtr");
@@ -27,8 +27,8 @@ router.get("/sold", getAllSoldProducts);
 router.get("/:id", getProductBySlug);
 
 // Only access for admin users
-router.patch("/admin/product-verified/:id", protect, isAdmin, verifyAndAddCommissionProductByAmdin);
-router.get("/admin/products", protect, isAdmin, getAllProductsByAmdin);
-router.delete("/admin/products", protect, isAdmin, deleteProductsByAmdin);
+router.patch("/admin/product-verified/:id", protect, isAdmin, verifyAndAddCommissionProductByAdmin);
+router.get("/admin/products", protect, isAdmin, getAllProductsByAdmin);
+router.delete("/admin/products", protect, isAdmin, deleteProductsByAdmin);
 
 module.exports = router;
