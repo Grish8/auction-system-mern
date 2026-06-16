@@ -33,8 +33,8 @@ const registerUser = asyncHandler(async (req, res) => {
     path: "/",
     httpOnly: true,
     expires: new Date(Date.now() + 1000 * 86400), // 1 day
-    sameSite: "none",
-    secure: true,
+    sameSite: "none", // Changed from "none" to "lax" for better compatibility
+    secure: false,// Only for local development
   });
 
   if (user) {
@@ -67,7 +67,7 @@ const loginUser = asyncHandler(async (req, res) => {
     httpOnly: true,
     expires: new Date(Date.now() + 1000 * 86400), // 1 day
     sameSite: "none",
-    secure: true,
+    secure: false,
   });
 
   if (user && passwordIsCorrrect) {
@@ -80,14 +80,25 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const loginStatus = asyncHandler(async (req, res) => {
+  console.log('Cookies received:', req.cookies); // Debug log
+
   const token = req.cookies.token;
+console.log('Token:', token); // Debug log
+
   if (!token) {
     return res.json(false);
   }
+  
+  try {
   const verified = jwt.verify(token, process.env.JWT_SECRET);
   if (verified) {
     return res.json(true);
   }
+} catch (error) {
+  console.error('Token verification error:', error.message);
+    return res.json(false);
+}
+  
   return res.json(false);
 });
 
@@ -176,8 +187,8 @@ const loginAsSeller = asyncHandler(async (req, res) => {
     path: "/",
     httpOnly: true,
     expires: new Date(Date.now() + 1000 * 86400),
-    sameSite: "none",
-    secure: true,
+    sameSite: "lax", // Changed from "none" to "lax" for better compatibility
+    secure: false,// Only for local development
   });
 
   // Send the response with updated user info
