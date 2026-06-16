@@ -1,28 +1,25 @@
 const asyncHandler = require("express-async-handler");
-const jwt = require("jsonwebtoken");
 const User = require("../model/userModel");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const Product = require("../model/productModel");
 
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+};
 
-  const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
-  };
+const registerUser = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body;
 
-  const registerUser = asyncHandler(async (req, res) => {
-  const {name,email,password} = req.body;
-
-  if(!name || !email || !password){
-      res.status(400);
-      throw new Error('Please fill in all required fields');
+  if (!name || !email || !password) {
+    res.status(400);
+    throw new Error("Please fill in all required fileds");
   }
 
-  const userExists = await User.findOne({ email });
-  if (userExists) {
+  const userExits = await User.findOne({ email });
+  if (userExits) {
     res.status(400);
-    throw new Error("Email address already exists");
+    throw new Error("Email is already exit");
   }
 
   const user = await User.create({
@@ -31,57 +28,54 @@ const Product = require("../model/productModel");
     password,
   });
 
-
   const token = generateToken(user._id);
-  res.cookie("token", token,{
-    path:"/",
-    httpOnly:true,
-    expires:new Date(Date.now()+ 1000*86400),
-    sameSite:'none',
+  res.cookie("token", token, {
+    path: "/",
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000 * 86400), // 1 day
+    sameSite: "none",
     secure: true,
-  }
-  );
+  });
 
-  if(user){
-    const {_id,name,email,photo, role} = user;
-    res.status(201).json({_id, name , email , photo , role , token});
-  }else{
+  if (user) {
+    const { _id, name, email, photo, role } = user;
+    res.status(201).json({ _id, name, email, photo, token, role });
+  } else {
     res.status(400);
-    throw new Error("Invalid user data")
+    throw new Error("Invalid user data");
   }
-
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-  const {email,password} = req.body;
-  if(!email || !password){
+  const { email, password } = req.body;
+
+  if (!email || !password) {
     res.status(400);
-    throw new Error('Please add Email and Password');
+    throw new Error("Please add Email and Password");
+  }
+  const user = await User.findOne({ email });
+  if (!user) {
+    res.status(400);
+    throw new Error("User not found, Please signUp");
   }
 
-  const user = await User.findOne({email});
-  if(!user){
-    res.status(400);
-    throw new Error('User not found, Please Sign Up');
-  }
+  const passwordIsCorrrect = await bcrypt.compare(password, user.password);
 
-  const passwordIsCorrect = await bcrypt.compare(password, user.password);
   const token = generateToken(user._id);
-  res.cookie("token", token,{
-    path:"/",
-    httpOnly:true,
-    expires:new Date(Date.now()+ 1000*86400),
-    sameSite:'none',
+  res.cookie("token", token, {
+    path: "/",
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000 * 86400), // 1 day
+    sameSite: "none",
     secure: true,
-  }
-  );
+  });
 
-  if(user && passwordIsCorrect){
-    const {_id,name,email,photo, role} = user;
-    res.status(200).json({_id, name , email , photo , role , token});
-  }else{
+  if (user && passwordIsCorrrect) {
+    const { _id, name, email, photo, role } = user;
+    res.status(201).json({ _id, name, email, photo, role, token });
+  } else {
     res.status(400);
-    throw new Error('Invalid email or password');
+    throw new Error("Invalid email or password");
   }
 });
 
@@ -111,10 +105,44 @@ const logoutUser = asyncHandler(async (req, res) => {
     sameSite: "none",
     secure: true,
   });
-  return res.json({ message: "Logged out successfully" });
+  return res.status(200).json({ message: "Successfully Logged Out" });
 });
 
+/* const loginAsSeller = asyncHandler(async (req, res) => {
+  const { email, password } = req.body;
 
+  if (!email || !password) {
+    res.status(400);
+    throw new Error("Please add Email and Password");
+  }
+  const user = await User.findOne({ email });
+  if (!user) {
+    res.status(400);
+    throw new Error("User not found, Please signUp");
+  }
+
+  const passwordIsCorrrect = await bcrypt.compare(password, user.password);
+
+  const token = generateToken(user._id);
+
+  res.cookie("token", token, {
+    path: "/",
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000 * 86400),
+    sameSite: "none",
+    secure: true,
+  });
+
+  user.role = "seller";
+  user.save();
+  if (user && passwordIsCorrrect) {
+    const { _id, name, email, photo, role } = user;
+    res.status(201).json({ _id, name, email, photo, role, token });
+  } else {
+    res.status(400);
+    throw new Error("Invalid email or password");
+  }
+}); */
 const loginAsSeller = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -194,16 +222,14 @@ const estimateIncome = asyncHandler(async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
 module.exports = {
-    registerUser,
-    loginUser,
-    loginStatus,
-    getUser,
-    logoutUser,
-    loginAsSeller,
-    getUserBalance,
-    getAllUser,
-    estimateIncome
-
+  registerUser,
+  loginUser,
+  loginStatus,
+  logoutUser,
+  loginAsSeller,
+  estimateIncome,
+  getUser,
+  getUserBalance,
+  getAllUser,
 };
