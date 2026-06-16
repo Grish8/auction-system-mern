@@ -28,7 +28,7 @@ const Product = require("../model/productModel");
   const user = await User.create({
     name,
     email,
-    password
+    password,
   });
 
 
